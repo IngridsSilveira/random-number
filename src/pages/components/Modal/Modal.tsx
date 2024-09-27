@@ -26,11 +26,6 @@ export const Modal: React.FC<ModalProps> = ({
             ? `Parabéns, você acertou! O número era ${numeroAleatorio}.`
             : `O número é ${dica} que ${inputValor}. Tente novamente!`}
         </p>
-
-        <p
-          className="text-center text-xs text-gray-700 font-bold mt-2"
-          id="teste"
-        >{`Número inserido: ${inputValor}, Número aleatório: ${numeroAleatorio}`}</p>
       </div>
     </div>
   );

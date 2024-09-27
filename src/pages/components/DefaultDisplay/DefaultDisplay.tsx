@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { Input, Button, Modal } from "../index";
 
 export const DefaultDisplay = () => {
+  const [numeroRandom, setRandomNumber] = useState<number>(
+    Math.floor(Math.random() * 100) + 1
+  );
   const [input, setInput] = useState<number>(0);
   const [buttonClick, setButtonClick] = useState<number>(0);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-
-  let numeroRandom = Math.floor(Math.random() * 101);
 
   useEffect(() => {
     if (modalVisible !== null) {
@@ -14,34 +15,28 @@ export const DefaultDisplay = () => {
     }
   }, [modalVisible]);
 
-  const abrirModal: any = () => {
-    //abrindo modal
-    setModalVisible(true);
+  const btnGetNumeroAleatorio = () => {
+    // Valida se o valor está vazio, negativo, ou fora do intervalo permitido
+    if (!input || input <= 0 || input > 100) {
+      alert("Por favor, insira um número entre 0 e 100.");
+      return;
+    }
+    //Quantidade de clicks
+    setButtonClick(buttonClick + 1);
+
+    setModalVisible(true); //abrindo modal
+  };
+
+  const resetNumero = () => {
+    setRandomNumber(Math.floor(Math.random() * 100) + 1);
+    setInput(0);
+    setButtonClick(0);
+    setModalVisible(false);
+    document.getElementById("inputFocus")?.focus();
   };
 
   const fecharModal: any = () => {
     //fechar modal
-    setModalVisible(false);
-  };
-
-  const numeroAleatorio = () => {
-    const inputValor = input;
-
-    // Valida se o valor está vazio, negativo, ou fora do intervalo permitido
-    if (!inputValor || inputValor <= 0 || inputValor > 100) {
-      alert("Por favor, insira um número entre 0 e 100.");
-      return;
-    }
-
-    //Quantidade de clicks
-    setButtonClick(buttonClick + 1);
-
-    document.getElementById("inputFocus")?.focus();
-    abrirModal();
-  };
-  const resetNumero = () => {
-    setInput(0);
-    setButtonClick(0);
     setModalVisible(false);
     document.getElementById("inputFocus")?.focus();
   };
@@ -60,7 +55,11 @@ export const DefaultDisplay = () => {
           />
           {/* botões */}
           <div className="m-auto">
-            <Button color="blue" label="Advinhar" onClick={numeroAleatorio} />
+            <Button
+              color="blue"
+              label="Advinhar"
+              onClick={btnGetNumeroAleatorio}
+            />
             <Button color="red" label="Resetar" onClick={resetNumero} />
           </div>
         </form>
@@ -76,14 +75,14 @@ export const DefaultDisplay = () => {
         </div>
       </div>
 
-     {/* modal */}
+      {/* modal */}
       {modalVisible && (
         <div id="modal" className="absolute right-0">
           {/* Renderiza o modal com dica e inputValor */}
           <Modal
-            dica={input < Number(numeroRandom) ? "maior" : "menor"}
+            dica={input < numeroRandom ? "maior" : "menor"}
             inputValor={input}
-            numeroAleatorio={Number(numeroRandom)}
+            numeroAleatorio={numeroRandom}
             onClick={fecharModal}
           />
         </div>
